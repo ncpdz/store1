@@ -89,6 +89,14 @@ function Header() {
                             CONTACT US
                           </p>
                         </Nav.Link>
+                        <NavDropdown className="font-bold" title="HISTORY">
+                          <NavLink to="/bill" className="dropdown-item">
+                            Bill
+                          </NavLink>
+                          <NavLink to="/feedback" className="dropdown-item">
+                            Feedback
+                          </NavLink>
+                        </NavDropdown>
                       </>
                     )}
                     <Nav.Link

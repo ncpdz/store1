@@ -8,6 +8,8 @@ import Login from "../components/login";
 import Register from "../components/register";
 import Payment from "../components/Payment/Payment";
 import PrivateRoute from "./PrivateRoute";
+import Customer from "../components/customer/Customer";
+import Feedback from "../components/feedback/Feedback";
 const AppRoute = () => {
   return (
     <>
@@ -45,6 +47,22 @@ const AppRoute = () => {
           element={
             <PrivateRoute>
               <Payment />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/bill"
+          element={
+            <PrivateRoute>
+              <Customer />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/feedback"
+          element={
+            <PrivateRoute>
+              <Feedback />
             </PrivateRoute>
           }
         />
