@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
 import { FetchAll } from "../../Services/FeedbackService";
 import "./Feedback.scss";
 import { debounce } from "lodash";
+import { UserContext } from "../../context/UserContext";
 
 const Feedback = () => {
+  const { user } = useContext(UserContext);
   const [listFeedback, setListFeedback] = useState([]);
   const [originalListFeedback, setOriginalListFeedback] = useState([]); // Thêm biến tạm thời
 
@@ -49,23 +51,26 @@ const Feedback = () => {
         </div>
         {listFeedback &&
           listFeedback.length > 0 &&
-          listFeedback.map((item, index) => {
-            return (
-              <div key={`Feedback-${index}`}>
-                <Accordion defaultActiveKey="0">
-                  <Accordion.Item>
-                    <Accordion.Header>{item.email_fb}</Accordion.Header>
-                    <Accordion.Body>
-                      <div>
-                        <h6>Message from: {item.user_fb}</h6>
-                      </div>
-                      <div className="mess_feed">{item.mess_fb}</div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </div>
-            );
-          })}
+          listFeedback
+            .filter(item => item.email_fb === user.email) // Lọc mảng dựa trên điều kiện
+            .map((item, index) => {
+              return (
+                <div key={`Feedback-${index}`}>
+                  <Accordion defaultActiveKey="0">
+                    <Accordion.Item>
+                      <Accordion.Header>{item.email_fb}</Accordion.Header>
+                      <Accordion.Body>
+                        <div>
+                          <h6>Message from: {item.user_fb}</h6>
+                        </div>
+                        <div className="mess_feed">{item.mess_fb}</div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                </div>
+              );
+            })}
+        
 
       </div>
     </>
