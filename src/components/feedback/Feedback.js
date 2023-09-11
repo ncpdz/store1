@@ -15,7 +15,7 @@ const Feedback = () => {
     let term = event.target.value;
     if (term) {
       let searchEmail = originalListFeedback.filter((item) =>
-        item.email_fb.includes(term)
+        item.mess_fb.includes(term)
       );
       setListFeedback(searchEmail);
     } else {
@@ -44,7 +44,7 @@ const Feedback = () => {
         <div className="col-4 my-3">
           <input
             className="form-control"
-            placeholder="search Customer by email"
+            placeholder="search message"
             //  value={keyWord}
             onChange={(event) => handleSearch(event)}
           ></input>
