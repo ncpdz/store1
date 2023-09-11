@@ -38,7 +38,7 @@ function Customer() {
     let term = event.target.value;
     if (term) {
       let searchEmail = originalListCustomers.filter((item) =>
-        item.email_ct.includes(term)
+        item.mess_ct.includes(term)
       );
       setListCustomers(searchEmail);
     } else {
@@ -92,7 +92,7 @@ function Customer() {
         <div className="col-4 my-3">
           <input
             className="form-control"
-            placeholder="search Customer by email"
+            placeholder="search message"
             //  value={keyWord}
             onChange={(event) => handleSearch(event)}
           ></input>
