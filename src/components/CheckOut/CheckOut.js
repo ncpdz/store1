@@ -42,7 +42,7 @@ function CheckOut() {
                   <img
                     src={item.image_url}
                     alt={item.image_name}
-                    className="w-16 h-16 rounded-full"
+                    className="w-[250px] h-[250px] rounded-full"
                   />
                   <div className="ml-4">
                     <h3 className="text-xl font-semibold">{item.image_name}</h3>

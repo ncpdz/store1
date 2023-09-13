@@ -58,7 +58,7 @@ const Register = () => {
             <div className="login-container col-12 col-sm-4 ">
                 <div className="title">Register</div>
                 <div className="text">New user</div>
-                <input id="text-email" type="text" placeholder="enter email"
+                <input id="text-email" type="email" placeholder="enter email"
                     value={e_mail}
                     onKeyPress={handleKeyPress}
                     onChange={(event) => set_e_mail(event.target.value)}

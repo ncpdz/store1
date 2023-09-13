@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { FetchAll } from "../../Services/CustomerService";
 import ModalView from "./ModalView";
 import "./Customer.scss";
 import _, { debounce } from "lodash";
 import { useLocation } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 function Customer() {
+  const { user } = useContext(UserContext);
   const [listCustomers, setListCustomers] = useState([]);
   const [IsShowModalView, SetIsShowModalView] = useState(false);
   const [dataCustomerView, setDataCustomerView] = useState({});
@@ -36,7 +38,7 @@ function Customer() {
     let term = event.target.value;
     if (term) {
       let searchEmail = originalListCustomers.filter((item) =>
-        item.email_ct.includes(term)
+        item.mess_ct.includes(term)
       );
       setListCustomers(searchEmail);
     } else {
@@ -90,7 +92,7 @@ function Customer() {
         <div className="col-4 my-3">
           <input
             className="form-control"
-            placeholder="search Customer by email"
+            placeholder="search message"
             //  value={keyWord}
             onChange={(event) => handleSearch(event)}
           ></input>
@@ -133,15 +135,16 @@ function Customer() {
             </tr>
           </thead>
           <tbody>
-            {listCustomers &&
-              listCustomers.length > 0 &&
-              listCustomers.map((item, index) => {
+          {listCustomers &&
+            listCustomers.length > 0 &&
+            listCustomers
+              .filter(item => item.email_ct === user.email) // Filter the array based on the condition
+              .map((item, index) => {
                 return (
                   <tr key={`Customers-${index}`}>
                     <td>{index + 1}</td>
                     <td>{item.email_ct}</td>
                     <td>{item.user_ct}</td>
-
                     <td
                       style={{ cursor: "pointer" }}
                       onClick={() => handleViewCustomer(item)}
@@ -150,7 +153,7 @@ function Customer() {
                     </td>
                   </tr>
                 );
-              })}
+              })}          
           </tbody>
         </Table>
         <ModalView
