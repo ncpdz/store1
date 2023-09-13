@@ -10,22 +10,6 @@ const Feedback = () => {
   const [listFeedback, setListFeedback] = useState([]);
   const [originalListFeedback, setOriginalListFeedback] = useState([]); // Thêm biến tạm thời
 
-  const handleViewCustomer = (Customer1) => {
-    // console.log(Customer1)
-    setDataCustomerView(Customer1);
-    SetIsShowModalView(true);
-  };
-  const handleClose = () => {
-    SetIsShowModalView(false);
-    getCustomers();
-  };
-  const handleSort = (sortBy, sortField) => {
-    setSortBy(sortBy);
-    setSortField(sortField);
-    const sortedCustomers = _.orderBy(listCustomers, [sortField], [sortBy]);
-    setListCustomers(sortedCustomers);
-    // console.log(sortedCustomers);
-  };
   const handleSearch = debounce((event) => {
     console.log(event.target.value);
     let term = event.target.value;
@@ -33,55 +17,30 @@ const Feedback = () => {
       let searchEmail = originalListFeedback.filter((item) =>
         item.mess_fb.includes(term)
       );
-      setListCustomers(searchEmail);
+      setListFeedback(searchEmail);
     } else {
-      setListCustomers(originalListCustomers); // Sử dụng dữ liệu gốc khi không có từ khóa tìm kiếm
+      setListFeedback(originalListFeedback); // Sử dụng dữ liệu gốc khi không có từ khóa tìm kiếm
     }
   }, 1000);
-  // Function để cắt chuỗi và thêm "..."
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
-  };
-  useEffect(() => {
-    getCustomers();
-    // Đặt một khoảng thời gian để gọi lại getCustomers sau mỗi 5 phút (300000ms)
-    const intervalId = setInterval(getCustomers, 300000);
 
-    // Trong useEffect, chúng ta cần trả về một hàm để xử lý khi component unmount
-    return () => clearInterval(intervalId);
+  useEffect(() => {
+    getFeedback();
   }, []);
 
-  const getCustomers = async () => {
+  const getFeedback = async () => {
     try {
       let res = await FetchAll();
       if (res && res.data) {
-        setListCustomers(res.data);
-        setOriginalListCustomers(res.data); // Lưu trữ dữ liệu gốc
+        setListFeedback(res.data);
+        setOriginalListFeedback(res.data); // Lưu trữ dữ liệu gốc
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
   };
-  // //mặc định theo chièu giảm dần
-  // const getCustomers = async () => {
-  //   try {
-  //     let res = await FetchAll();
-  //     if (res && res.data) {
-  //       const sortedCustomers = _.orderBy(res.data, ["id"], ["desc"]); // Sắp xếp giảm dần theo trường "id"
-  //       setListCustomers(sortedCustomers);
-  //       setOriginalListCustomers(sortedCustomers); // Lưu trữ dữ liệu gốc
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data: ", error);
-  //   }
-  // };
-  // console.log("check sort: ", sortBy, sortField)
   return (
     <>
-      <div className="container">
+      <div className="container my-4">
         <div className="col-4 my-3">
           <input
             className="form-control"
@@ -116,6 +75,6 @@ const Feedback = () => {
       </div>
     </>
   );
-}
+};
 
-export default Customer;
+export default Feedback;
