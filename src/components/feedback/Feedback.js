@@ -1,21 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import { FetchAll } from "../../Services/CustomerService";
-import ModalView from "../customer/ModalView";
-import "../customer/Customer.scss";
-import _, { debounce } from "lodash";
-import { useLocation } from "react-router-dom";
+import { Accordion } from "react-bootstrap";
+import { FetchAll } from "../../Services/FeedbackService";
+import "./Feedback.scss";
+import { debounce } from "lodash";
 import { UserContext } from "../../context/UserContext";
 
-function Customer() {
+const Feedback = () => {
   const { user } = useContext(UserContext);
-  const [listCustomers, setListCustomers] = useState([]);
-  const [IsShowModalView, SetIsShowModalView] = useState(false);
-  const [dataCustomerView, setDataCustomerView] = useState({});
-  const [sortBy, setSortBy] = useState("asc");
-  const [sortField, setSortField] = useState("id");
-  //  const [keyWord, setKeyWord] = useState(""); //chỉ dùng khi muốn có button search
-  const [originalListCustomers, setOriginalListCustomers] = useState([]); // Thêm biến tạm thời
+  const [listFeedback, setListFeedback] = useState([]);
+  const [originalListFeedback, setOriginalListFeedback] = useState([]); // Thêm biến tạm thời
 
   const handleViewCustomer = (Customer1) => {
     // console.log(Customer1)
@@ -37,8 +30,8 @@ function Customer() {
     console.log(event.target.value);
     let term = event.target.value;
     if (term) {
-      let searchEmail = originalListCustomers.filter((item) =>
-        item.mess_ct.includes(term)
+      let searchEmail = originalListFeedback.filter((item) =>
+        item.mess_fb.includes(term)
       );
       setListCustomers(searchEmail);
     } else {
@@ -97,70 +90,29 @@ function Customer() {
             onChange={(event) => handleSearch(event)}
           ></input>
         </div>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>
-                <div className="sort-header">
-                  <span>Ordinal</span>
-                  <span>
-                    <i
-                      className="fa-solid fa-arrow-up"
-                      onClick={() => handleSort("asc", "id")}
-                    ></i>
-                    <i
-                      className="fa-solid fa-arrow-down"
-                      onClick={() => handleSort("desc", "id")}
-                    ></i>
-                  </span>
+        {listFeedback &&
+          listFeedback.length > 0 &&
+          listFeedback
+            .filter(item => item.email_fb === user.email) // Lọc mảng dựa trên điều kiện
+            .map((item, index) => {
+              return (
+                <div key={`Feedback-${index}`}>
+                  <Accordion defaultActiveKey="0">
+                    <Accordion.Item>
+                      <Accordion.Header>{item.email_fb}</Accordion.Header>
+                      <Accordion.Body>
+                        <div>
+                          <h6>Message from: {item.user_fb}</h6>
+                        </div>
+                        <div className="mess_feed">{item.mess_fb}</div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
                 </div>
-              </th>
-              <th>
-                <div className="sort-header">
-                  <span>Email</span>
-                  <span>
-                    <i
-                      className="fa-solid fa-arrow-up"
-                      onClick={() => handleSort("asc", "email_ct")}
-                    ></i>
-                    <i
-                      className="fa-solid fa-arrow-down"
-                      onClick={() => handleSort("desc", "email_ct")}
-                    ></i>
-                  </span>
-                </div>
-              </th>
-              <th>Customer</th>
-              <th>Messenger</th>
-            </tr>
-          </thead>
-          <tbody>
-          {listCustomers &&
-            listCustomers.length > 0 &&
-            listCustomers
-              .filter(item => item.email_ct === user.email) // Filter the array based on the condition
-              .map((item, index) => {
-                return (
-                  <tr key={`Customers-${index}`}>
-                    <td>{index + 1}</td>
-                    <td>{item.email_ct}</td>
-                    <td>{item.user_ct}</td>
-                    <td
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleViewCustomer(item)}
-                    >
-                      {truncateText(item.mess_ct, 20)}
-                    </td>
-                  </tr>
-                );
-              })}          
-          </tbody>
-        </Table>
-        <ModalView
-          show={IsShowModalView}
-          dataCustomerView={dataCustomerView}
-          handleClose={handleClose}
-        />
+              );
+            })}
+        
+
       </div>
     </>
   );
